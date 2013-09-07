@@ -218,7 +218,7 @@ func openInternal(options OpenOptions) (io.ReadWriteCloser, error) {
 	file, err :=
 		os.OpenFile(
 			options.PortName,
-			os.O_RDWR|os.O_NOCTTY|os.O_NONBLOCK,
+			os.O_RDWR|0x100|0x800,
 			0600)
 
 	if err != nil {
