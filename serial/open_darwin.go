@@ -233,7 +233,7 @@ func openInternal(options OpenOptions) (io.ReadWriteCloser, error) {
 			uintptr(syscall.F_SETFL),
 			uintptr(0))
 
-	if err := os.NewSyscallError("SYS_IOCTL", int(errno)); err != nil {
+	if err := os.NewSyscallError("SYS_IOCTL", errno); err != nil {
 		return nil, err
 	}
 
