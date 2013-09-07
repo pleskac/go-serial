@@ -88,7 +88,7 @@ func setTermios(fd int, src *termios) error {
 			uintptr(unsafe.Pointer(src)))
 
 	// Did the syscall return an error?
-	if err := os.NewSyscallError("SYS_IOCTL", int(errno)); err != nil {
+	if err := os.NewSyscallError("SYS_IOCTL", errno); err != nil {
 		return err
 	}
 
