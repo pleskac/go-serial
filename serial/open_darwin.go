@@ -247,7 +247,7 @@ func openInternal(options OpenOptions) (io.ReadWriteCloser, error) {
 		return nil, err
 	}
 
-	err = setTermios(file.Fd(), terminalOptions)
+	err = setTermios(int(file.Fd()), terminalOptions)
 	if err != nil {
 		return nil, err
 	}
