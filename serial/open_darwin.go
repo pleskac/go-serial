@@ -226,7 +226,7 @@ func openInternal(options OpenOptions) (io.ReadWriteCloser, error) {
 	fmt.Println("Opened the file")
 
 	// We want to do blocking I/O, so clear the non-blocking flag set above.
-	//r1, _, errno := syscall.Syscall(syscall.SYS_FCNTL, uintptr(file.Fd()), uintptr(syscall.F_SETFL), uintptr(0))
+	/*r1, _, errno := syscall.Syscall(syscall.SYS_FCNTL, uintptr(file.Fd()), uintptr(syscall.F_SETFL), uintptr(0))
 
 	fmt.Println("Made the syscall")
 
