@@ -241,7 +241,7 @@ func openInternal(options OpenOptions) (io.ReadWriteCloser, error) {
 		panic(err)
 		return nil, err
 	}
-*/
+
 	// Set appropriate options.
 	terminalOptions, err := convertOptions(options)
 	if err != nil {
@@ -254,7 +254,7 @@ func openInternal(options OpenOptions) (io.ReadWriteCloser, error) {
 		panic(err)
 		return nil, err
 	}
-
+*/
 	// We're done.
 	return file, nil
 }
