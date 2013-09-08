@@ -28,11 +28,12 @@ package serial
 import (
 	"errors"
 	"io"
+	"fmt"
+	"math"
+	"os"
+	"syscall"
+	"unsafe"
 )
-import "math"
-import "os"
-import "syscall"
-import "unsafe"
 
 // termios types
 type cc_t byte
@@ -215,6 +216,7 @@ func convertOptions(options OpenOptions) (*termios, error) {
 func openInternal(options OpenOptions) (io.ReadWriteCloser, error) {
 	// Open the serial port in non-blocking mode, since otherwise the OS will
 	// wait for the CARRIER line to be asserted.
+	fmt.Println("Attempting to open Darwin port")
 	file, err :=
 		os.OpenFile(
 			options.PortName,
@@ -225,30 +227,34 @@ func openInternal(options OpenOptions) (io.ReadWriteCloser, error) {
 		return nil, err
 	}
 
+	fmt.Println("Opened the file")
+
 	// We want to do blocking I/O, so clear the non-blocking flag set above.
-	r1, _, errno :=
-		syscall.Syscall(
-			syscall.SYS_FCNTL,
-			uintptr(file.Fd()),
-			uintptr(syscall.F_SETFL),
-			uintptr(0))
+	r1, _, errno := syscall.Syscall(syscall.SYS_FCNTL, uintptr(file.Fd()), uintptr(syscall.F_SETFL), uintptr(0))
+
+	fmt.Println("Made the syscall")
 
 	if err := os.NewSyscallError("SYS_IOCTL", errno); err != nil {
+		panic(err)
 		return nil, err
 	}
 
 	if r1 != 0 {
-		return nil, errors.New("Unknown error from SYS_FCNTL.")
+		err := errors.New("Unknown error from SYS_FCNTL.")
+		panic(err)
+		return nil, err
 	}
 
 	// Set appropriate options.
 	terminalOptions, err := convertOptions(options)
 	if err != nil {
+		panic(err)
 		return nil, err
 	}
 
 	err = setTermios(int(file.Fd()), terminalOptions)
 	if err != nil {
+		panic(err)
 		return nil, err
 	}
 
